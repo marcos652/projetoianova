@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IA EFICAZ</title>
-    <link rel="stylesheet" href="assets\style\style.css">
+    <link rel="stylesheet" href="assets/style/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,24 +15,68 @@
             <div class="icon">⚡</div>
             <h1>Experimente o poder da Inteligência Artificial Na EFICAZ</h1>
         </div>
-        <div class="card">
 
+        <div class="card">
+            <!-- Respostas da IA ou interações podem ir aqui -->
         </div>
+
         <div class="input-container">
             <span>+</span>
-            <input type="text" placeholder='Envie uma mensagem ou digite "/" para exibir os comandos'>
-            <button>&rarr;</button>
+            <input id="mensagemInput" type="text" placeholder='Envie uma mensagem ou digite "/" para exibir os comandos'>
+            <button id="enviarBtn">&rarr;</button>
         </div>
 
         <div class="sidebar">
-            <h2>Historico</h2>
-            <ul>
-                <li><a href="#">teste</a></li>
-                <li><a href="#">teste</a></li>
-                <li><a href="#">teste</a></li>
-                <li><a href="#">teste</a></li>
+            <h2>Histórico</h2>
+            <ul id="historicoLista">
+                <!-- Histórico gerado via JS -->
             </ul>
         </div>
     </div>
+
+    <script>
+        const input = document.getElementById("mensagemInput");
+        const btn = document.getElementById("enviarBtn");
+        const listaHistorico = document.getElementById("historicoLista");
+
+        // Carrega o histórico salvo no localStorage
+        function carregarHistorico() {
+            const historico = JSON.parse(localStorage.getItem("historico")) || [];
+            listaHistorico.innerHTML = ""; // limpa antes de recriar
+
+            historico.forEach(item => {
+                const li = document.createElement("li");
+                li.innerHTML = `<a href="#">${item}</a>`;
+                listaHistorico.appendChild(li);
+            });
+        }
+
+        // Salva uma nova entrada no histórico
+        function salvarNoHistorico(mensagem) {
+            let historico = JSON.parse(localStorage.getItem("historico")) || [];
+            historico.push(mensagem);
+            localStorage.setItem("historico", JSON.stringify(historico));
+        }
+
+        // Quando o botão for clicado
+        btn.addEventListener("click", () => {
+            const mensagem = input.value.trim();
+            if (mensagem !== "") {
+                salvarNoHistorico(mensagem);
+                carregarHistorico();
+                input.value = ""; // limpa o input
+            }
+        });
+
+        // Enter também envia
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                btn.click();
+            }
+        });
+
+        // Carrega histórico ao abrir a página
+        carregarHistorico();
+    </script>
 </body>
 </html>
